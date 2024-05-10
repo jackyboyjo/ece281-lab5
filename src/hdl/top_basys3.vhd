@@ -29,12 +29,14 @@ entity top_basys3 is
 -- TODO
         port (
             --Inputs
-            btnU, btnC, clk: in std_logic;
-        
+            btnU: in std_logic;
+            btnC: in std_logic;
+            clk: in std_logic;
+            
             sw: in std_logic_vector(7 downto 0);
             
             --Outputs
-            seg: out std_logic_vector(7 downto 0);
+            seg: out std_logic_vector(6 downto 0);
             
             led: out std_logic_vector(15 downto 0)
             
@@ -99,7 +101,7 @@ architecture top_basys3_arch of top_basys3 is
 		component sevenSegDecoder is
             Port ( 
                 i_D : in STD_LOGIC_VECTOR (3 downto 0);
-                o_S : out STD_LOGIC_VECTOR (7 downto 0)
+                o_S : out STD_LOGIC_VECTOR (6 downto 0)
                 );
         end component sevenSegDecoder;
         
@@ -116,13 +118,28 @@ architecture top_basys3_arch of top_basys3 is
         end component Controller_fsm;
         
 		  --Signals
-		  signal w_reset, w_adv, w_clk: std_logic;
+		  signal w_reset: std_logic; 
+		  signal w_adv: std_logic;
+		  signal w_clk: std_logic;
 		  		  		  
 		  signal w_flags: std_logic_vector(2 downto 0);
 		  		  
-		  signal w_hund, w_tens, w_ones, w_wire, w_gone, w_op, w_sign, w_cycle: std_logic_vector(3 downto 0);
+		  signal w_hund: std_logic_vector(3 downto 0);
+		  signal w_tens: std_logic_vector(3 downto 0);
+		  signal w_ones: std_logic_vector(3 downto 0);
+		  signal w_wire: std_logic_vector(3 downto 0);
+		  signal w_gone: std_logic_vector(3 downto 0);
+		  signal w_op: std_logic_vector(3 downto 0);
+		  signal w_sign: std_logic_vector(3 downto 0);
+		  signal w_cycle: std_logic_vector(3 downto 0);
 		  
-		  signal w_bin, w_result, w_regA, w_regB, w_A, w_B: std_logic_vector(7 downto 0);
+		  signal w_bin: std_logic_vector(7 downto 0);
+		  signal w_result: std_logic_vector(7 downto 0);
+		  signal w_regA: std_logic_vector(7 downto 0);
+		  signal w_regB: std_logic_vector(7 downto 0);
+		  signal w_A: std_logic_vector(7 downto 0);
+		  signal w_B: std_logic_vector(7 downto 0);
+		  
 begin
 	-- PORT MAPS ----------------------------------------
         ALU_inst: ALU
@@ -149,7 +166,7 @@ begin
 	   
 	   
 	   clk_div_inst: clock_divider
-            generic map(k_DIV => 25000000)
+            generic map(k_DIV => 50000000)
             port map (
                 i_clk => clk,
                 i_reset => btnU,
